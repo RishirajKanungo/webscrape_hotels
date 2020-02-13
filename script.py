@@ -13,7 +13,7 @@ website = requests.get(url)
 data = BeautifulSoup(website.content, 'html.parser')
 
 #find all divs with the specified class name
-image_data = data.find_all('div', attrs={"class": "app-layer-base"})
+image_data = data.find_all('div', attrs={"class": "media-viewer-gallery-MediaGallery__item--2qFvR"})
 
 #print all of the images in the list
 print('Total number of images: ', len(image_data))
