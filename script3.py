@@ -31,21 +31,66 @@ options.add_experimental_option("prefs", prefs)
 driver.get(
     "https://www.tripadvisor.com/Hotel_Review-g28970-d84078-Reviews-Hyatt_Regency_Washington_on_Capitol_Hill-Washington_DC_District_of_Columbia.html#/media/84078/?albumid=101&type=2&category=101")
 
-#wait until element is found
-images = WebDriverWait(driver, 20).until(
-    EC.presence_of_all_elements_located(
-        (By.XPATH, '//*[@class="media-viewer-dt-root-GalleryImageWithOverlay__galleryImage--1Drp0"]')))
+#wait until element is found and then store all webelements into list
+# images = WebDriverWait(driver, 20).until(
+#     EC.presence_of_all_elements_located(
+#         (By.XPATH, '//*[@class="media-viewer-dt-root-GalleryImageWithOverlay__galleryImage--1Drp0"]')))
+
+# image_url = []
+
+# lenOfPage = driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
+# print("Length of page is:", lenOfPage)
+
+# driver.execute_script("arguments[0].scrollIntoView();", images[-1])
+
+# #iterate through images and acquire their url based on background image style
+# for index, image in enumerate(images):
+#     image_url.append(images[index].value_of_css_property("background-image"))
+
+# #clean the list to provide clear links
+# for i in range(len(image_url)):
+#     start = image_url[i].find("url(\"") + len("url(\"")
+#     end = image_url[i].find("\")")
+#     print(image_url[i][start:end])
+
+
+print(driver.window_handles)
+
+#make sure to add the Hotel Name for each one
 
 image_url = []
 
-#iterate through images and acquire their url based on background image style
-for index, image in enumerate(images):
-    image_url.append(images[index].value_of_css_property("background-image"))
+end = False
+while not(end):
+
+    #get the old version of the list
+    old_image_length = image_url
+    
+    #wait until element is found and then store all webelements into list
+    images = WebDriverWait(driver, 20).until(
+        EC.presence_of_all_elements_located(
+            (By.XPATH, '//*[@class="media-viewer-dt-root-GalleryImageWithOverlay__galleryImage--1Drp0"]')))
+    
+    #iterate through visible images and add their url to list
+    for index, image in enumerate(images):
+        image_url.append(images[index].value_of_css_property("background-image"))
+
+    new_image_length = image_url
+    
+    #move to next visible images in the array which is the last one
+    driver.execute_script("arguments[0].scrollIntoView();", images[-1])
+    
+    #wait one second
+    time.sleep(1)
+
+    #if the first and last image in the arrays are the same for visibility then get out
+    # for index, image in enumerate(images):
+    #     if(new_image_length[index] == )
 
 #clean the list to provide clear links
 for i in range(len(image_url)):
     start = image_url[i].find("url(\"") + len("url(\"")
     end = image_url[i].find("\")")
-    print(image_url[i][start:end])
+    print(image_url[i][start:end]) 
 
 #print(image_url)
